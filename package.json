@@ -1,0 +1,13 @@
+{
+  "name": "hk-server-symfony",
+  "description": "HK Server Symfony",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:ValentinMumble/hk-server-symfony.git"
+  },
+  "author": "Valentin Dijkstra",
+  "license": "MIT",
+  "scripts": {
+    "upload": "export $(cat .env | grep PKG | xargs) && rsync -avz -e 'ssh' ./ $PKG_DEPLOY_HOST:$PKG_DEPLOY_PATH"
+  }
+}

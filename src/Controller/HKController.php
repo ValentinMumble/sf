@@ -15,19 +15,34 @@ use HKAPI\API as HK;
 class HKController extends AbstractFOSRestController
 {
   private $hk = null;
-  private function getHK()
+
+  private function initializeHK(): ?string
   {
-    if ($this->hk == null) {
-      $this->hk = new HK($_ENV['HK_IP'], 10025, new \HKAPI\Devices\AVR());
+    if (null === $this->hk) {
+      try {
+        $hk = new HK($_ENV['HK_IP'], 10025, new \HKAPI\Devices\AVR());
+        $this->hk = $hk->zone('Main Zone');
+      } catch (\Exception $exception) {
+        return $exception->getMessage();
+      }
     }
-    return $this->hk->zone('Main Zone');
   }
 
   private function formatResponse(Request $req, $statusCode, $data = null)
   {
     $json = array('uri' => $req->getPathInfo());
-    if ($data != null) $json = array_merge($json, $data);
+
+    if ($data !== null) $json = array_merge($json, $data);
+
     return $this->handleView($this->view($json, $statusCode));
+  }
+
+  /**
+   * @Rest\Get("/")
+   */
+  public function index(Request $req)
+  {
+    return $this->formatResponse($req, Response::HTTP_OK, array('message' => "Hello."));
   }
 
   /**
@@ -35,7 +50,13 @@ class HKController extends AbstractFOSRestController
    */
   public function setSource(Request $req, string $sourceName)
   {
-    $this->getHK()->selectSource($sourceName);
+    $error = $this->initializeHK();
+    if ($error || null === $this->hk) {
+      return $this->formatResponse($req, Response::HTTP_BAD_REQUEST, array('error' => "Failed to set $sourceName: $error"));
+    }
+
+    $this->hk->selectSource($sourceName);
+
     return $this->formatResponse($req, Response::HTTP_OK, array('message' => "Setting source $sourceName..."));
   }
 
@@ -44,7 +65,13 @@ class HKController extends AbstractFOSRestController
    */
   public function powerOff(Request $req)
   {
-    $this->getHK()->off('');
+    $error = $this->initializeHK();
+    if ($error || null === $this->hk) {
+      return $this->formatResponse($req, Response::HTTP_BAD_REQUEST, array('error' => "Failed to turn off: $error"));
+    }
+
+    $this->hk->off('');
+
     return $this->formatResponse($req, Response::HTTP_OK, array('message' => "Powering off..."));
   }
 
@@ -53,11 +80,17 @@ class HKController extends AbstractFOSRestController
    */
   public function setVolume(Request $req, string $direction)
   {
-    if ($direction == 'up') {
-      $this->getHK()->volumeUp('');
-    } else if ($direction == 'down') {
-      $this->getHK()->volumeDown('');
+    $error = $this->initializeHK();
+    if ($error || null === $this->hk) {
+      return $this->formatResponse($req, Response::HTTP_BAD_REQUEST, array('error' => "Failed to set volume $direction: $error"));
     }
+
+    if ($direction === 'up') {
+      $this->hk->volumeUp('');
+    } else if ($direction === 'down') {
+      $this->hk->volumeDown('');
+    }
+
     return $this->formatResponse($req, Response::HTTP_OK);
   }
 }
