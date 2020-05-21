@@ -1,0 +1,13 @@
+{
+  "name": "sf",
+  "description": "Symfony server",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:ValentinMumble/sf.git"
+  },
+  "author": "Valentin Dijkstra",
+  "license": "MIT",
+  "scripts": {
+    "upload": "export $(cat .env | grep PKG | xargs) && rsync --copy-links --exclude={'var','.git'} -avz -e 'ssh' ./ $PKG_DEPLOY_HOST:$PKG_DEPLOY_PATH --delete"
+  }
+}
