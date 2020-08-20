@@ -20,12 +20,19 @@ class FileController
         'lh765yu' => 'sr'
     ];
 
+    const MIMES = [
+        'mp4' => 'video/mp4',
+        'mkv' => 'video/x-matrovska',
+        'png' => 'image/png',
+        'jpg' => 'image/jpg'
+    ];
+
     const VALIDITY_S = 60 * 30;
 
     /**
      * @Route("/{zone}/{file64}", methods={"GET"})
      */
-    public function serveFile(Request $request, string $zone, string $file64)
+    public function serveFile(Request $request, string $zone, string $file64): Response
     {
         $requestTime = $request->query->get('t');
 
@@ -36,7 +43,7 @@ class FileController
         $path = sprintf('/%s/%s', self::ZONES[$zone], base64_decode($file64));
 
         $response = new Response();
-        $response->headers->set('Content-Type', 'video/mp4');
+        $response->headers->set('Content-Type', self::MIMES[pathinfo($path)['extension']] ?? 'video/mp4');
         $response->headers->set('X-Accel-Redirect', $path);
 
         return $response;
