@@ -8,6 +8,6 @@
   "author": "Valentin Dijkstra",
   "license": "MIT",
   "scripts": {
-    "upload": "export $(cat .env | grep PKG | xargs) && rsync --copy-links --exclude={'var','.git'} -avz -e 'ssh' ./ $PKG_DEPLOY_HOST:$PKG_DEPLOY_PATH --delete"
+    "upload": "export $(cat .env | grep PKG | xargs) && rsync --copy-links --exclude={'var','.git','vendor'} -avz -e 'ssh' ./ $PKG_DEPLOY_HOST:$PKG_DEPLOY_PATH --delete && ssh $PKG_DEPLOY_HOST \"cd $PKG_DEPLOY_PATH && bin/console cache:clear\""
   }
 }

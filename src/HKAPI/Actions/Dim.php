@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace HKAPI\Actions;
 
 use HKAPI\Interfaces\ActionInterface;

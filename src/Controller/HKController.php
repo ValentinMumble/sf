@@ -28,7 +28,7 @@ class HKController
 
         $this->hk->selectSource($sourceName);
 
-        return new JsonResponse(['results' => ["Setting source $sourceName..."], 'errors' => []]);
+        return new JsonResponse("Setting source $sourceName...");
     }
 
     /**
@@ -40,7 +40,7 @@ class HKController
 
         $this->hk->off();
 
-        return new JsonResponse(['results' => ['Powering off...'], 'errors' => []]);
+        return new JsonResponse('Powering off...');
     }
 
     /**
@@ -52,7 +52,7 @@ class HKController
 
         $this->hk->sleep();
 
-        return new JsonResponse(['results' => ['Setting sleep timer...'], 'errors' => []]);
+        return new JsonResponse('Setting sleep timer...');
     }
 
     /**
@@ -64,7 +64,7 @@ class HKController
 
         $this->hk->dim();
 
-        return new JsonResponse(['results' => ['Dimming HUD...'], 'errors' => []]);
+        return new JsonResponse('Dimming HUD...');
     }
 
     /**
