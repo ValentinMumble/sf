@@ -1,10 +1,37 @@
 <style>
-body {
-  background-color: #282c34;
-  color: #ddd;
-}
+  body {
+    background-color: #282c34;
+    color: #ddd;
+  }
 
-a {
-  color: inherit;
-}
+  hr {
+    display: none;
+  }
+
+  a:first-child {
+    position: fixed;
+    top: 60px;
+  }
+
+  a {
+    color: inherit;
+    font-size: 1.5vw;
+  }
+
+  pre {
+    margin-top: 60px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 10px;
+    align-items: center;
+    white-space: inherit;
+  }
+
+  h1 {
+    font-family: sans-serif;
+    font-size: 2em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 </style>
