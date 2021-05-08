@@ -17,10 +17,8 @@ class ExceptionListener
         $statusCode = $exception instanceof HttpExceptionInterface ? $exception->getStatusCode() : Response::HTTP_INTERNAL_SERVER_ERROR;
 
         $response = new JsonResponse([
-            'error' => [
-                'name' => get_class($exception),
-                'message' => $exception->getMessage()
-            ]
+            'name' => get_class($exception),
+            'message' => $exception->getMessage()
         ], $statusCode);
         $event->setResponse($response);
     }
